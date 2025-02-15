@@ -1,17 +1,14 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const gallery = document.getElementById("images");
-
-export function renderImages(images) {
-  gallery.innerHTML = ""; // Очищаємо перед додаванням нових зображень
+export function renderGallery(images) {
+const gallery = document.querySelector('.gallery');
+gallery.innerHTML = '';
 
 if (images.length === 0) {
     iziToast.error({
-    title: "Oops!",
-    message: "Sorry, there are no images matching your search query. Please try again!",
+    title: 'Error',
+    message: 'Sorry, there are no images matching your search query. Please try again!',
     });
     return;
 }
@@ -19,37 +16,24 @@ if (images.length === 0) {
 const markup = images
     .map(
     (image) => `
-    <div class="card">
-        <a href="${image.largeImageURL}" class="img-cont">
-        <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
+    <li class="card">
+        <a href="${image.largeImageURL}" class="gallery-link">
+        <img src="${image.webformatURL}" alt="${image.tags}" class="gallery-image"/>
         </a>
         <div class="describtion-cont">
-        <div class="block">
-            <h4>Likes</h4>
-            <p>${image.likes}</p>
+        <div class="block"><h4>Likes</h4><p>${image.likes}</p></div>
+        <div class="block"><h4>Views</h4><p>${image.views}</p></div>
+        <div class="block"><h4>Comments</h4><p>${image.comments}</p></div>
+        <div class="block"><h4>Downloads</h4><p>${image.downloads}</p></div>
         </div>
-        <div class="block">
-            <h4>Views</h4>
-            <p>${image.views}</p>
-        </div>
-        <div class="block">
-            <h4>Comments</h4>
-            <p>${image.comments}</p>
-        </div>
-        <div class="block">
-            <h4>Downloads</h4>
-            <p>${image.downloads}</p>
-        </div>
-        </div>
-    </div>
-    `
+    </li>`
     )
-    .join("");
+    .join('');
 
 gallery.innerHTML = markup;
 
-  // Оновлюємо галерею для роботи SimpleLightbox
-const lightbox = new SimpleLightbox(".img-cont a");
+const lightbox = new SimpleLightbox('.gallery a');
 lightbox.refresh();
 }
+
 
