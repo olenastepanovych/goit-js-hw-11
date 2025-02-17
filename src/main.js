@@ -2,10 +2,15 @@ import { fetchImages } from './js/pixabay-api.js';
 import { renderGallery } from './js/render-functions.js';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.form');
 const input = document.querySelector('.input');
 const loader = document.querySelector('.loader');
+const gallery = document.querySelector('.gallery');
+
+let lightbox = new SimpleLightbox('.gallery a');
 
 form.addEventListener('submit', async (event) => {
 event.preventDefault();
@@ -19,11 +24,13 @@ if (!query) {
     return;
 }
 
+gallery.innerHTML = '';
 loader.style.display = 'block';
 
 try {
     const images = await fetchImages(query);
     renderGallery(images);
+    lightbox.refresh();
 } catch (error) {
     iziToast.error({
     title: 'Error',
